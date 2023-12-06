@@ -1,26 +1,44 @@
-from abc import ABC, abstractmethod
-from dao.ConnexionDAO import ConnexionDB
+from dao.ModelDAO import ModelDAO
+from model.ActorM import Actor
 
 
-class ActorDAO(ABC):
-    conn_obj = ConnexionDB().getConnexion()
+class ActorDAO(ModelDAO):
+    def __init__(self):
+        '''
+        Initialise l'objet ActorDAO en établissant une connexion à la base de données.
+        '''
+        params = ModelDAO.modeleDAO.connect_objet
+        self.cur = params.cursor()
 
-    @abstractmethod
-    def insertOne(self, obj) -> int:
+    def insertOne(self, objIns: Actor) -> int:
         pass
 
-    @abstractmethod
-    def insertMany(self, objList) -> int:
+    def insertAll(self, objInsList:list[Actor]=[]) -> int:
         pass
 
-    @abstractmethod
-    def findOne(self, pattern) -> object:
+    def findOne(self, pattern) -> Actor:
         pass
 
-    @abstractmethod
-    def findAll(self) -> list:
+    def findAll(self) -> list[Actor]:
         pass
 
-    @abstractmethod
-    def findOneByOne(self, patter) -> list:
+    def findOneByOne(self, pattern) -> list[Actor]:
+        pass
+
+    def findOneByOneWithLike(self, patternLike) -> list[Actor]:
+        pass
+
+    def updateOne(self, cleAnc, objModif: Actor) -> int:
+        pass
+
+    def deleteOne(self, cleSup) -> int:
+        pass
+
+    def createUser(self, pwd, user) -> object:
+        pass
+
+    def createRole(self, role) -> int:
+        pass
+
+    def attributeRole(self, user, role) -> int:
         pass
