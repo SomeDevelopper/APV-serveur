@@ -5,21 +5,21 @@ from model.MovieM import Movie
 class Role:
 
     def __init__(self):
-        self.__actor_id: Actor = None
-        self.__movie_id: Movie = None
+        self.__id_actor: Actor = None
+        self.__id_movie: Movie = None
         self.__role: str = None
 
     def setActorId(self, actorId: Actor) -> None:
-        self.__actor_id = actorId
+        self.__id_actor = actorId
 
     def getActorId(self) -> int:
-        return self.__actor_id
+        return self.__id_actor
 
     def setMovieId(self, movieId: Movie) -> None:
-        self.__movie_id = movieId
+        self.__id_movie = movieId
 
     def getMovieId(self) -> int:
-        return self.__movie_id
+        return self.__id_movie
 
     def setRole(self, role) -> None:
         self.__role = role

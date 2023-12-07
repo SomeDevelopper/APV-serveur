@@ -1,28 +1,28 @@
 class Actor:
 
     def __init__(self) -> None:
-        self.__actor_id: int = None
-        self.__first_name: str = ''
-        self.__last_name: str = ''
+        self.__id_actor: int = None
+        self.__firstname: str = ''
+        self.__lastname: str = ''
         self.__gender: str = ''
 
     def setActorId(self, actorId) -> None:
-        self.__actor_id = actorId
+        self.__id_actor = actorId
 
     def getActorId(self) -> int:
-        return self.__actor_id
+        return self.__id_actor
 
     def setFirstname(self, firstname) -> None:
-        self.__first_name = firstname
+        self.__firstname = firstname
 
     def getFirstname(self) -> str:
-        return self.__first_name
+        return self.__firstname
 
     def setLastname(self, lastname) -> None:
-        self.__last_name = lastname
+        self.__lastname = lastname
 
     def getLastname(self) -> str:
-        return self.__last_name
+        return self.__lastname
 
     def setGender(self, gender) -> None:
         self.__gender = gender

@@ -1,31 +1,31 @@
 class Movie:
 
     def __init__(self):
-        self.__movie_id: int = None
-        self.__movie_name: str = ''
-        self.__movie_year: int = None
-        self.__movie_rank: float = None
+        self.__id_movie: int = None
+        self.__name: str = ''
+        self.__year: int = None
+        self.__rank: float = None
 
     def setMovieId(self, movie_id) -> None:
-        self.__movie_id = movie_id
+        self.__id_movie = movie_id
 
     def getMovieId(self) -> int:
-        return self.__movie_id
+        return self.__id_movie
 
     def setMovieName(self, movie_name) -> None:
-        self.__movie_name = movie_name
+        self.__name = movie_name
 
     def getMovieName(self) -> str:
-        return self.__movie_name
+        return self.__name
 
     def setMovieYear(self, movie_year) -> None:
-        self.__movie_year = movie_year
+        self.__year = movie_year
 
     def getMovieYear(self) -> int:
-        return self.__movie_year
+        return self.__year
 
     def setMovieRank(self, movie_rank) -> None:
-        self.__movie_rank = movie_rank
+        self.__rank = movie_rank
 
     def getMovieRank(self) -> float:
-        return self.__movie_rank
+        return self.__rank

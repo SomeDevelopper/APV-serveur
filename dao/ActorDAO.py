@@ -20,7 +20,27 @@ class ActorDAO(ModelDAO):
         pass
 
     def findAll(self) -> list[Actor]:
-        pass
+        '''
+        find all actor in database
+        '''
+        try:
+            query = '''SELECT * FROM actor a;'''
+            self.cur.execute(query)
+            res = self.cur.fetchall()
+            list_actor = []
+            if len(res) > 0:
+                for r in res:
+                    actor = Actor()
+                    actor.setActorId(r[0])
+                    actor.setFirstname(r[1])
+                    actor.setLastname(r[2])
+                    actor.setGender(r[3])
+                    list_actor.append(actor)
+                return list_actor
+            else:
+                return None
+        except Exception as error:
+            print(f"Error_ActorDOA.findAll() ::: {error}")
 
     def findOneByOne(self, pattern) -> list[Actor]:
         pass
