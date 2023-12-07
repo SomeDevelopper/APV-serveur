@@ -1,61 +1,58 @@
-from abc import ABC, abstractmethod
-from dao.ConnexionDAO import ConnexionBD
+from dao.ModelDAO import ModelDAO
 
 
-class ModelDAO(ABC):
+class Systadmin(ModelDAO):
+    def __init__(self):
+        '''
+        Initialise l'objet DAO en établissant une connexion à la base de données.
+        '''
+        params = ModelDAO.modeleDAO.connect_objet
+        self.cur = params.cursor()
 
-    connect_objet = ConnexionBD().getConnexion()
-
-    @abstractmethod
     def insertOne(self, objIns) -> int:
         pass
 
-    @abstractmethod
     def insertAll(self, objInsList: list) -> int:
         pass
 
-    @abstractmethod
-    def findOne(self, pattern) -> list:
+    def findOne(self, pattern) -> object:
         pass
 
-    @abstractmethod
     def findAll(self) -> list:
         pass
 
-    @abstractmethod
     def findOneByOne(self, pattern) -> list:
         pass
 
-    @abstractmethod
     def findOneByOneWithLike(self, patternLike) -> list:
         pass
 
-    @abstractmethod
     def updateOne(self, cleAnc, objModif) -> int:
         pass
 
-    @abstractmethod
     def deleteOne(self, cleSup) -> int:
         pass
 
-    # REQUETE SEANCE 4/5:
-    # 1- Moyenne des ranks de films dans une année donnée
-    # 2- CASE WHEN : Filtre par rank
-    # 3-
-    # 4-
-
-    @abstractmethod
     def createUser(self, pwd, user) -> int:
+        '''
+        Create new user in DB
+        '''
         pass
 
-    @abstractmethod
     def createRole(self, role) -> int:
+        '''
+        Create new role in DB
+        '''
         pass
 
-    @abstractmethod
     def attribuerPriviliege(self, privileges: str, tables: str, role: str) -> int:
+        '''
+        Attribute Privilège to a role
+        '''
         pass
 
-    @abstractmethod
     def attributeRole(self, user, role) -> int:
+        '''
+        Attribute role to user
+        '''
         pass

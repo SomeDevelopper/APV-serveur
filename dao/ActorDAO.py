@@ -13,7 +13,7 @@ class ActorDAO(ModelDAO):
     def insertOne(self, objIns: Actor) -> int:
         pass
 
-    def insertAll(self, objInsList:list[Actor]=[]) -> int:
+    def insertAll(self, objInsList: list[Actor] = []) -> int:
         pass
 
     def findOne(self, pattern) -> Actor:
@@ -34,10 +34,13 @@ class ActorDAO(ModelDAO):
     def deleteOne(self, cleSup) -> int:
         pass
 
-    def createUser(self, pwd, user) -> object:
+    def createUser(self, pwd, user) -> int:
         pass
 
     def createRole(self, role) -> int:
+        pass
+
+    def attribuerPriviliege(self, privileges: str, tables: str, role: str) -> int:
         pass
 
     def attributeRole(self, user, role) -> int:
