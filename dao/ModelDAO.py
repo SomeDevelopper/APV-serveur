@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
 from dao.ConnexionDAO import ConnexionBD
 
-class ModeleDAO(ABC):
+
+class ModelDAO(ABC):
 
     connect_objet = ConnexionBD().getConnexion()
 
@@ -10,7 +11,7 @@ class ModeleDAO(ABC):
         pass
 
     @abstractmethod
-    def insertAll(self, objInsList:list) -> int:
+    def insertAll(self, objInsList: list) -> int:
         pass
 
     @abstractmethod
@@ -40,8 +41,8 @@ class ModeleDAO(ABC):
     # REQUETE SEANCE 4/5:
     # 1- Moyenne des ranks de films dans une année donnée
     # 2- CASE WHEN : Filtre par rank
-    # 3- 
-    # 4- 
+    # 3-
+    # 4-
 
     @abstractmethod
     def createUser(self, pwd, user) -> object:
