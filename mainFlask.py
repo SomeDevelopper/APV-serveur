@@ -19,8 +19,8 @@ def get_all_actor():
         for dc in directorc:
             director = {
                 "id_director": dc.getIdDirector(),
-                "firstname": dc.setDirectorFirstname(),
-                "lastname": dc.setDirectorLastname()
+                "firstname": dc.getDirectorFirstname(),
+                "lastname": dc.getDirectorLastname()
             }
             list_director.append(director)
 
