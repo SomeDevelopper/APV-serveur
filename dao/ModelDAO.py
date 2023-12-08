@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
-from dao.ConnexionDAO import ConnexionBD
+from dao.ConnexionDAO import ConnexionDB
 
 
 class ModelDAO(ABC):
 
-    connect_objet = ConnexionBD().getConnexion()
+    connect_objet = ConnexionDB().getConnexion()
 
     @abstractmethod
     def insertOne(self, objIns) -> int:
