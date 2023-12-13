@@ -4,7 +4,7 @@ class Actor:
         self.__id_actor: int = None
         self.__firstname: str = ''
         self.__lastname: str = ''
-        self.__gender: str = ''
+        
 
     def setActorId(self, actorId) -> None:
         self.__id_actor = actorId
@@ -23,9 +23,3 @@ class Actor:
 
     def getLastname(self) -> str:
         return self.__lastname
-
-    def setGender(self, gender) -> None:
-        self.__gender = gender
-
-    def getGender(self) -> str:
-        self.__gender

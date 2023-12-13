@@ -1,4 +1,5 @@
 from dao.ActorDAO import *
+from model import ActorM
 
 
 class Actor:
@@ -6,7 +7,15 @@ class Actor:
     # Find All Actor in Database
     @staticmethod
     def findAllActor():
-        pass
+        try:
+            actorDAO = ActorDAO()
+            a: list[ActorM.Actor]|str = actorDAO.findAll()
+            if a == None:
+                return 'ERROR'
+            return a
+        except Exception as exception:
+            print(f'''Error_ActorC.findAllActor ::: {exception}''')
+        return None
 
     # Find one actor with idActor in Database
     @staticmethod
