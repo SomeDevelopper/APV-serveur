@@ -40,7 +40,7 @@ class DirectorGenreDAO(ModelDAO):
     def createRole(self, role) -> int:
         pass
 
-    def attribuerPriviliege(self, privileges: str, tables: str, role: str) -> int:
+    def attribuerPrivilege(self, privileges: str, tables: str, role: str) -> int:
         pass
 
     def attributeRole(self, user, role) -> int:

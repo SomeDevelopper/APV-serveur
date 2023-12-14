@@ -14,7 +14,8 @@ class ActorDAO(ModelDAO):
         try:
             query = '''INSERT INTO actor (id_actor, firstname, lastname)
                         VALUES (%s, %s, %s)'''
-            self.cur.execute(query, (objIns.getActorId, objIns.getFirstname, objIns.getLastname))
+            self.cur.execute(
+                query, (objIns.getActorId, objIns.getFirstname, objIns.getLastname))
             self.cur.connection.commit()
             return self.cur.rowcount if self.cur.rowcount > 0 else 0
         except Exception as exception:
@@ -27,7 +28,8 @@ class ActorDAO(ModelDAO):
         try:
             query = '''INSERT INTO actor (id_actor, firstname, lastname)
                         VALUES (%s, %s, %s)'''
-            self.cur.executemany(query, [(actor.getActorId(), actor.getFirstname(), actor.getLastname()) for actor in objInsList])
+            self.cur.executemany(query, [(actor.getActorId(), actor.getFirstname(
+            ), actor.getLastname()) for actor in objInsList])
             self.cur.connection.commit()
             return self.cur.rowcount if self.cur.rowcount > 0 else 0
         except Exception as exception:
@@ -41,7 +43,7 @@ class ActorDAO(ModelDAO):
         find one actor in database
         '''
         try:
-            query =  '''SELECT * FROM actor WHERE id_actor = %s;'''
+            query = '''SELECT * FROM actor WHERE id_actor = %s;'''
             self.cur.execute(query, (idActor))
             res = self.cur.fetchone()
 
@@ -58,7 +60,6 @@ class ActorDAO(ModelDAO):
             return None
         finally:
             self.cur.close()
-
 
     def findAll(self) -> list[Actor]:
         '''
@@ -113,7 +114,7 @@ class ActorDAO(ModelDAO):
             self.cur.execute(query, (patternLike))
             res = self.cur.fetchall()
             list_actor = []
-            if len(res)>0:
+            if len(res) > 0:
                 for a in res:
                     actor = Actor()
                     actor.setActorId(a[0])
@@ -132,7 +133,8 @@ class ActorDAO(ModelDAO):
     def updateOne(self, cleAnc, objModif: Actor) -> int:
         try:
             query = '''UPDATE actor SET firstname = %s, lastname = %s WHERE id_actor = %s'''
-            self.cur.execute(query, (objModif.getFirstname, objModif.getLastname, cleAnc))
+            self.cur.execute(query, (objModif.getFirstname,
+                             objModif.getLastname, cleAnc))
             self.cur.connection.commit()
             return self.cur.rowcount if self.cur.rowcount != 0 else 0
         except Exception as exception:
@@ -141,7 +143,7 @@ class ActorDAO(ModelDAO):
             return 0
         finally:
             self.cur.close()
-        
+
     def deleteOne(self, cleSup) -> int:
         try:
             query = '''DELETE FROM actor WHERE id_actor = %s'''
@@ -161,7 +163,7 @@ class ActorDAO(ModelDAO):
     def createRole(self, role) -> int:
         pass
 
-    def attribuerPriviliege(self, privileges: str, tables: str, role: str) -> int:
+    def attribuerPrivilege(self, privileges: str, tables: str, role: str) -> int:
         pass
 
     def attributeRole(self, user, role) -> int:

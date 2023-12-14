@@ -1,4 +1,4 @@
-from dao.ActorDAO import *
+from dao.ActorDAO import ActorDAO
 from model import ActorM
 
 
@@ -8,8 +8,7 @@ class Actor:
     @staticmethod
     def findAllActor():
         try:
-            actorDAO = ActorDAO()
-            a: list[ActorM.Actor]|str = actorDAO.findAll()
+            a: list[ActorM.Actor] | str = ActorDAO().findAll()
             if a == None:
                 return 'ERROR'
             return a

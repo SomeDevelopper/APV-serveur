@@ -2,6 +2,7 @@ from dao.ModelDAO import ModelDAO
 
 
 class Systadmin(ModelDAO):
+
     def __init__(self):
         '''
         Initialise l'objet DAO en établissant une connexion à la base de données.
@@ -33,26 +34,54 @@ class Systadmin(ModelDAO):
     def deleteOne(self, cleSup) -> int:
         pass
 
-    def createUser(self, pwd, user) -> int:
-        '''
-        Create new user in DB
-        '''
-        pass
+    def createUser(self, pwd: str, user: str) -> int:
+        print('DAO', self)
+
+        try:
+            query = f'''CREATE USER {user} WITH PASSWORD {pwd};'''
+            self.cur.execute(query)
+            self.cur.connection.commit()
+            print(self.cur.rowcount)
+            return self.cur.rowcount if self.cur.rowcount > 0 else 0
+        except Exception as exception:
+            print(f'''Error_systadminDAO.createUser ::: {exception}''')
+            self.cur.connection.rollback()
+        finally:
+            self.cur.close()
 
     def createRole(self, role) -> int:
-        '''
-        Create new role in DB
-        '''
-        pass
+        try:
+            query = f'''CREATE ROLE {role}'''
+            self.cur.execute(query)
+            self.cur.connection.commit()
+            return self.cur.rowcount if self.cur.rowcount > 0 else 0
+        except Exception as exception:
+            print(f'''Error_systadminDAO.createRole ::: {exception}''')
+            self.cur.connection.rollback()
+        finally:
+            self.cur.close()
 
     def attribuerPriviliege(self, privileges: str, tables: str, role: str) -> int:
-        '''
-        Attribute Privilège to a role
-        '''
-        pass
+        try:
+            query = f'''GRANT {privileges} ON {tables} TO {role}'''
+            self.cur.execute(query)
+            self.cur.connection.commit()
+            return self.cur.rowcount if self.cur.rowcount > 0 else 0
+        except Exception as exception:
+            print(
+                f'''Error_systadminDAO.attribuerPriviliege ::: {exception}''')
+            self.cur.connection.rollback()
+        finally:
+            self.cur.close()
 
     def attributeRole(self, user, role) -> int:
-        '''
-        Attribute role to user
-        '''
-        pass
+        try:
+            query = f'''GRANT {role} TO {user}'''
+            self.cur.execute(query)
+            self.cur.connection.commit()
+            return self.cur.rowcount if self.cur.rowcount > 0 else 0
+        except Exception as exception:
+            print(f'''Error_systadminDAO.attributeRole ::: {exception}''')
+            self.cur.connection.rollback()
+        finally:
+            self.cur.close()

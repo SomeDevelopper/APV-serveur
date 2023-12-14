@@ -53,7 +53,7 @@ class ModelDAO(ABC):
         pass
 
     @abstractmethod
-    def attribuerPriviliege(self, privileges: str, tables: str, role: str) -> int:
+    def attribuerPrivilege(self, privileges: str, tables: str, role: str) -> int:
         pass
 
     @abstractmethod

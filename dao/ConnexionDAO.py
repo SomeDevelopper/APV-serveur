@@ -14,7 +14,6 @@ class ConnexionDB:
             print("Get Params from config.yaml in progress")
             with open("config/config.yaml", "r") as filc:
                 data = yaml.safe_load(filc)
-            # config = data["postgreSQL_access"]
             host = data['host']
             port = data['port']
             db = data['database']
