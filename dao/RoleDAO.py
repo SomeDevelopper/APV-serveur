@@ -20,7 +20,38 @@ class RoleDAO(ModelDAO):
         pass
 
     def findAll(self) -> list[Role]:
-        pass
+        def trouverTout(self) -> list[Role]:
+        '''
+        Récupère tous les enregistrements de la table Role.
+
+        :return: Une liste d'objets Role.
+        '''
+        try:
+            query = '''SELECT * FROM role;'''
+            self.cur.execute(query)
+            res = self.cur.fetchall()
+
+            liste_b = [] 
+
+            if len(res)>0:
+
+                for r in res:
+                    ro = Role()
+
+                    ro.setBrandId(r[0])
+                    ro.setBrandName(r[1])
+
+                    liste_b.append(ro)
+
+                return liste_ro
+
+            else:
+
+                return None
+        except Exception as e:
+            print(f"Erreur_RoleDAO.trouverTout() ::: {e}")
+        finally:
+            self.cur.close()
 
     def findOneByOne(self, pattern) -> list[Role]:
         pass
@@ -38,7 +69,18 @@ class RoleDAO(ModelDAO):
         pass
 
     def createRole(self, role) -> int:
-        pass
+        def creerRole(self, role) -> int:
+        
+        try:
+            query = f'''CREATE ROLE {role};'''
+            self.cur.execute(query)
+            self.cur.connection.commit()
+            return self.cur.rowcount if self.cur.rowcount != 0 else 0
+        except Exception as e:
+            print(f"Erreur_SysAdminDAO.creerRole() ::: {e}")
+            self.cur.connection.rollback()
+        finally:
+            self.cur.close()
 
     def attribuerPrivilege(self, privileges: str, tables: str, role: str) -> int:
         pass
