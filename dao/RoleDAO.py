@@ -11,7 +11,17 @@ class RoleDAO(ModelDAO):
         self.cur = params.cursor()
 
     def insertOne(self, objIns: Role) -> int:
-        pass
+        try:
+            query = '''INSERT INTO Role (idActor, role) 
+                       VALUES (%s, %s);'''
+            self.cur.execute(query, (objIns.getidActor(), objIns.getRole()))
+            self.cur.connection.commit() 
+            return self.cur.rowcount if self.cur.rowcount!=0 else 0
+        except Exception as e:
+            print(f"Erreur_BrandsDAO.insererUn() ::: {e}")
+            self.cur.connection.rollback()
+        finally:
+            self.cur.close()
 
     def insertAll(self, objInsList: list[Role] = []) -> int:
         pass
@@ -20,7 +30,34 @@ class RoleDAO(ModelDAO):
         pass
 
     def findAll(self) -> list[Role]:
-        pass
+        def trouverTout(self) -> list[Role]:
+            
+        try:
+            query = '''SELECT * FROM role;'''
+            self.cur.execute(query)
+            res = self.cur.fetchall()
+
+            liste_b = [] 
+
+            if len(res)>0:
+
+                for r in res:
+                    ro = Role()
+
+                    ro.setidActor(r[0])
+                    ro.setid(r[1])
+
+                    liste_b.append(ro)
+
+                return liste_ro
+
+            else:
+
+                return None
+        except Exception as e:
+            print(f"Error_RoleDAO.FindAll() ::: {e}")
+        finally:
+            self.cur.close()
 
     def findOneByOne(self, pattern) -> list[Role]:
         pass
@@ -32,13 +69,23 @@ class RoleDAO(ModelDAO):
         pass
 
     def deleteOne(self, cleSup) -> int:
-        pass
+        try:
+            query = '''DELETE FROM Role WHERE Role = %s;'''
+            self.cur.execute(query, (cleSup,))
+            self.cur.connection.commit()
+            return self.cur.rowcount if self.cur.rowcount != 0 else 0
+        except Exception as e:
+            print(f"Erreur_RoleDAO.deleteOne() ::: {e}")
+            self.cur.connection.rollback()
+        finally:
+            self.cur.close()
+
 
     def createUser(self, pwd, user) -> int:
         pass
 
     def createRole(self, role) -> int:
-        pass
+       pass
 
     def attribuerPriviliege(self, privileges: str, tables: str, role: str) -> int:
         pass
