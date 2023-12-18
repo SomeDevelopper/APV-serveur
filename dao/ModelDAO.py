@@ -39,10 +39,14 @@ class ModelDAO(ABC):
         pass
 
     # REQUETE SEANCE 4/5:
-    # 1- Moyenne des ranks de films dans une année donnée
     # 2- CASE WHEN : Filtre par rank sur les films
     # 3- 
     # 4-
+
+    # 1- Moyenne des ranks de films dans une année donnée
+    @abstractmethod
+    def getAverageRankForYear(self, year) -> list:
+        pass
 
     @abstractmethod
     def createUser(self, pwd, user) -> int:

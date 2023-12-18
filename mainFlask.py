@@ -185,7 +185,21 @@ def _search_movie_with_title():
             list_movie.append(movie)
         return {'response': list_movie}
     if movieC == 'ERROR': 
-        return {'response': 'Erreur, aucun film trouvé'}
+        return {'response': 'Erreur, aucun film trouvé.'}
+    
+
+# Custom REQUEST FROM CLASS
+@app.route(f'/api/amz/request/get_rank_average_by_year', methods=['GET'])
+def _get_average_rank_year():
+    '''
+        Get average movie's rank for specific year from database
+    '''
+    year = request.json.get('year')
+    movieC = MovieC.Movie.get_average_movie_rank_with_year(year)
+    if movieC == 'ERROR':
+        return {"response": "Erreur lors du classement moyen."}
+    if movieC:
+        return {"response": f"Le classement moyen pour l'annnée {year} est {movieC[0]}"}
     
 
 #ADMIN

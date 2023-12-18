@@ -100,6 +100,25 @@ class MovieDAO(ModelDAO):
     def deleteOne(self, cleSup) -> int:
         pass
 
+    def getAverageRankForYear(self, year):
+        '''
+            Get average movie rank for specific year from database
+        '''
+        try:
+            query = '''SELECT AVG(rank)::numeric(10) from movie where year_movie = %s'''
+            self.cur.execute(query, (year,))
+            res = self.cur.fetchall()
+            if res:
+                return res[0]
+            else:
+                return None
+
+
+        except Exception as exception:
+            print(f'''Error_MovieDAO.getAverageRankForYear ::: {exception}''')
+        finally:
+            self.cur.close()
+
     def createUser(self, pwd, user) -> int:
         pass
 

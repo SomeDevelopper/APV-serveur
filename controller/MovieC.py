@@ -28,10 +28,21 @@ class Movie:
     @staticmethod
     def search_movie_by_title(patternLike):
         try:
-            m: list[MovieM.Movie] | str() = MovieDAO().findOneWithLike(patternLike)
+            m: list[MovieM.Movie] | str = MovieDAO().findOneWithLike(patternLike)
             if m == None:
                 return 'ERROR'
             return m
         except Exception as exception:
             print(f'''Error_MovieC.search_movie_by_title ::: {exception}''')
+        return None
+    
+    @staticmethod
+    def get_average_movie_rank_with_year(year):
+        try:
+            m = MovieDAO().getAverageRankForYear(year)
+            if m[0] is None:
+                return 'ERROR'
+            return m
+        except Exception as exception:
+            print(f'''Error_MovieC.get_average_movie_rank_with_year ::: {exception}''')
         return None

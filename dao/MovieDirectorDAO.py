@@ -34,6 +34,9 @@ class MovieDirectorDirectorDAO(ModelDAO):
     def deleteOne(self, cleSup) -> int:
         pass
 
+    def getAverageRankForYear(self, year) -> list:
+        pass
+
     def createUser(self, pwd, user) -> int:
         pass
 
