@@ -27,7 +27,7 @@ class ModelDAO(ABC):
         pass
 
     @abstractmethod
-    def findOneByOneWithLike(self, patternLike) -> list:
+    def findOneWithLike(self, patternLike) -> list:
         pass
 
     @abstractmethod
@@ -40,8 +40,8 @@ class ModelDAO(ABC):
 
     # REQUETE SEANCE 4/5:
     # 1- Moyenne des ranks de films dans une année donnée
-    # 2- CASE WHEN : Filtre par rank
-    # 3-
+    # 2- CASE WHEN : Filtre par rank sur les films
+    # 3- 
     # 4-
 
     @abstractmethod

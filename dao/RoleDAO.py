@@ -25,7 +25,7 @@ class RoleDAO(ModelDAO):
     def findOneByOne(self, pattern) -> list[Role]:
         pass
 
-    def findOneByOneWithLike(self, patternLike) -> list[Role]:
+    def findOneWithLike(self, patternLike) -> list[Role]:
         pass
 
     def updateOne(self, cleAnc, objModif: Role) -> int:

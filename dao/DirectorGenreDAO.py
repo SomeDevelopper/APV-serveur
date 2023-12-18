@@ -25,7 +25,7 @@ class DirectorGenreDAO(ModelDAO):
     def findOneByOne(self, pattern) -> list[DirectorGenre]:
         pass
 
-    def findOneByOneWithLike(self, patternLike) -> list[DirectorGenre]:
+    def findOneWithLike(self, patternLike) -> list[DirectorGenre]:
         pass
 
     def updateOne(self, cleAnc, objModif: DirectorGenre) -> int:

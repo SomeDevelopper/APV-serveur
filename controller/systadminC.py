@@ -1,4 +1,4 @@
-from dao.systadminDAO import *
+from dao.SystadminDAO import *
 
 
 class SystadminC:

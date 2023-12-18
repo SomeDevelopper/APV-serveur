@@ -18,20 +18,29 @@ class Actor:
 
     # Find one actor with idActor in Database
     @staticmethod
-    def findOneActor(idActor):
-        pass
-
-    # Add one actor in Database
+    def searchActor(idActor):
+        '''
+        Search Actor by id
+        '''
+        try:
+            a: ActorM.Actor = ActorDAO().findOne(idActor)
+            if a == None:
+                return 'ERROR'
+            return a
+        except Exception as exception:
+            print(f'''Error_ActorC.searchActor ::: {exception}''')
+        return None
+    
     @staticmethod
-    def addActor(idActor, firstname, lastname, gender):
-        pass
-
-    # Update one actor in Database
-    @staticmethod
-    def updateActor(idActor, firstname, lastname, gender):
-        pass
-
-    # Delete One Actor in Database
-    @staticmethod
-    def deleteActor(idActor):
-        pass
+    def search_actor_by_title(pattern):
+        '''
+            Search Actor by Name in database
+        '''
+        try:
+            a: list[ActorM.Actor] | str = ActorDAO().findOneWithLike(pattern)
+            if a == None:
+                return 'ERROR'
+            return a
+        except Exception as exception:
+            print(f'''Error_ActorC.search_actor_by_title ::: {exception}''')
+        return None

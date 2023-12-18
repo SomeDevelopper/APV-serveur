@@ -25,7 +25,7 @@ class Systadmin(ModelDAO):
     def findOneByOne(self, pattern) -> list:
         pass
 
-    def findOneByOneWithLike(self, patternLike) -> list:
+    def findOneWithLike(self, patternLike) -> list:
         pass
 
     def updateOne(self, cleAnc, objModif) -> int:

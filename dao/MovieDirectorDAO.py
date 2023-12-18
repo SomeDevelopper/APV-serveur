@@ -25,7 +25,7 @@ class MovieDirectorDirectorDAO(ModelDAO):
     def findOneByOne(self, pattern) -> list[MovieDirector]:
         pass
 
-    def findOneByOneWithLike(self, patternLike) -> list[MovieDirector]:
+    def findOneWithLike(self, patternLike) -> list[MovieDirector]:
         pass
 
     def updateOne(self, cleAnc, objModif: MovieDirector) -> int:

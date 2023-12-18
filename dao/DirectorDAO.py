@@ -16,8 +16,28 @@ class DirectorDAO(ModelDAO.ModelDAO):
     def insertAll(self, objInsList: list[Director] = []) -> int:
         pass
 
-    def findOne(self, pattern) -> Director:
-        pass
+    def findOne(self, idDirector) -> Director:
+        '''
+            Find Director by id in database
+        '''
+        try:
+            query = '''SELECT * from director WHERE id_director = %s'''
+            self.cur.execute(query, (idDirector,))
+            res = self.cur.fetchone()
+            if res:
+                director = Director()
+                director.setIdDirector(res[0])
+                director.setDirectorFirstname(res[1])
+                director.setDirectorLastname(res[2])
+                return director
+            else:
+                return None
+        except Exception as exception:
+            print(f'''Error_DirectorDAO.findOne ::: {exception}''')
+            return None
+        finally:
+            self.cur.close()
+
 
     def findAll(self) -> list[Director]:
         try:
@@ -46,8 +66,30 @@ class DirectorDAO(ModelDAO.ModelDAO):
     def findOneByOne(self, pattern) -> list[Director]:
         pass
 
-    def findOneByOneWithLike(self, patternLike) -> list[Director]:
-        pass
+    def findOneWithLike(self, patternLike) -> list[Director]:
+        '''
+            Find one director with 'LIKE' in database
+        '''
+        try:
+            query = '''SELECT * FROM director WHERE firstname LIKE %s'''
+            self.cur.execute(query, (patternLike,))
+            res = self.cur.fetchall()
+
+            list_director = []
+            if len(res) > 0:
+                for direc in res:
+                    director = Director()
+                    director.setIdDirector(direc[0])
+                    director.setDirectorFirstname(direc[1])
+                    director.setDirectorLastname(direc[2])
+                    list_director.append(director)
+                return list_director
+            else:
+                return None
+        except Exception as exception:
+            print(f'''Error_DirectorDAO.findOneWithLike ::: {exception}''')
+        finally:
+            self.cur.close()
 
     def updateOne(self, cleAnc, objModif: Director) -> int:
         pass

@@ -25,7 +25,7 @@ class MovieGenre(ModelDAO):
     def findOneByOne(self, pattern) -> list[MovieGenre]:
         pass
 
-    def findOneByOneWithLike(self, patternLike) -> list[MovieGenre]:
+    def findOneWithLike(self, patternLike) -> list[MovieGenre]:
         pass
 
     def updateOne(self, cleAnc, objModif: MovieGenre) -> int:
