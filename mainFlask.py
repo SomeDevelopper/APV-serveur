@@ -2,13 +2,15 @@ from flask import Flask, render_template, request
 import json
 import traceback
 from datetime import datetime
-from controller import DirectorC, ActorC, MovieC, SystadminC
+from controller import DirectorC, ActorC, MovieC, SystadminC, MovieDirectorC
 
 from model import DirectorM, ActorM, MovieM
 
 app = Flask(__name__)
 
-#DIRECTOR
+# DIRECTOR
+
+
 @app.route(f'/api/amz/director/search_dir', methods=['GET'])
 def _get_all_director():
     '''
@@ -30,6 +32,7 @@ def _get_all_director():
         return {'response': list_director}
     return {'response': directorc}
 
+
 @app.route('/api/amz/director/search_director', methods=['GET'])
 def _search_director():
     '''
@@ -46,6 +49,7 @@ def _search_director():
         return {'response': res}
     if directC == 'ERROR':
         return {'response': 'Erreur, aucun director trouvé'}
+
 
 @app.route(f'/api/amz/director/search_with_name', methods=['GET'])
 def _search_director_name():
@@ -67,7 +71,9 @@ def _search_director_name():
     if directC == 'ERROR':
         return {'response': 'Erreur, aucun director trouvé'}
 
-#ACTOR
+# ACTOR
+
+
 @app.route(f'/api/amz/actor/get_all_actor', methods=['GET'])
 def _get_all_actor():
     '''
@@ -87,6 +93,7 @@ def _get_all_actor():
         return {'response': list_actor}
     return {'response': actorC}
 
+
 @app.route(f'/api/amz/actor/search_actor', methods=['GET'])
 def _search_actor():
     '''
@@ -96,14 +103,15 @@ def _search_actor():
     actorC = ActorC.Actor.searchActor(id_actor)
     if type(actorC) == ActorM.Actor:
         res = {
-                "id_actor": actorC.getActorId(),
-                "firstname": actorC.getFirstname(),
-                "lastname": actorC.getLastname()
+            "id_actor": actorC.getActorId(),
+            "firstname": actorC.getFirstname(),
+            "lastname": actorC.getLastname()
         }
-        return  {'response': res }
+        return {'response': res}
     if actorC == 'ERROR':
         return {'response': 'Erreur, aucune valeur trouver'}
-    
+
+
 @app.route(f'/api/amz/actor/search_with_name', methods=['GET'])
 def _search_actor_with_name():
     '''
@@ -111,7 +119,7 @@ def _search_actor_with_name():
     '''
     pattern = request.json.get('name')
     actorC = ActorC.Actor.search_actor_by_title(pattern)
-    
+
     list_actor = []
     if type(actorC) == list:
         for act in actorC:
@@ -122,10 +130,12 @@ def _search_actor_with_name():
             }
             list_actor.append(actor)
         return {'response': list_actor}
-    if actorC == 'ERROR': 
+    if actorC == 'ERROR':
         return {'response': 'Erreur, aucun acteur trouvé'}
 
-#MOVIE
+# MOVIE
+
+
 @app.route(f'/api/amz/movie/search_movie', methods=['GET'])
 def _search_movie():
     '''
@@ -143,6 +153,7 @@ def _search_movie():
         return {'response': res}
     if movieC == 'ERROR':
         return {'response': 'Erreur, aucune valeur trouver'}
+
 
 @app.route(f'/api/amz/movie/get_all_movie', methods=['GET'])
 def _get_all_movie():
@@ -162,8 +173,9 @@ def _get_all_movie():
             }
             list_movie.append(movie)
         return {'response': list_movie}
-    if movieC == 'ERROR': 
+    if movieC == 'ERROR':
         return {'response': 'Erreur, aucun film trouvé'}
+
 
 @app.route(f'/api/amz/movie/search_with_title', methods=['GET'])
 def _search_movie_with_title():
@@ -172,7 +184,7 @@ def _search_movie_with_title():
     '''
     pattern = request.json.get('title')
     movieC = MovieC.Movie.search_movie_by_title(pattern)
-    
+
     list_movie = []
     if type(movieC) == list:
         for mv in movieC:
@@ -184,11 +196,33 @@ def _search_movie_with_title():
             }
             list_movie.append(movie)
         return {'response': list_movie}
-    if movieC == 'ERROR': 
+    if movieC == 'ERROR':
         return {'response': 'Erreur, aucun film trouvé.'}
-    
+
+
+@app.route(f'/api/amz/movie/get_infos_movie', methods=['GET'])
+def _get_all_infos_movie():
+    '''
+        Get all information for one movie from database
+    '''
+    id_movie = request.json.get('id_movie')
+    id_director = request.json.get('id_director')
+    pattern = []
+    pattern.append(id_movie, id_director)
+    mdC = MovieDirectorC.MovieDirector.get_movie_director()
+    if mdC == 'ERROR':
+        return {"response": "Errur lors de la récupération de données"}
+    if mdC:
+        id_movie_res = mdC.getMovieId()
+        id_director_res = mdC.getDirectorId()
+        print(id_movie_res)
+        print(id_director_res)
+        return {'response': mdC}
+
 
 # Custom REQUEST FROM CLASS
+
+
 @app.route(f'/api/amz/request/get_rank_average_by_year', methods=['GET'])
 def _get_average_rank_year():
     '''
@@ -200,9 +234,9 @@ def _get_average_rank_year():
         return {"response": "Erreur lors du classement moyen."}
     if movieC:
         return {"response": f"Le classement moyen pour l'annnée {year} est {movieC[0]}"}
-    
 
-#ADMIN
+
+# ADMIN
 @app.route(f'/api/amz/admin/create_user', methods=['POST'])
 def _create_user():
     try:
@@ -263,4 +297,3 @@ def _grand_role_user():
     except Exception as exception:
         print(f"Erreur lors de l'attribution des roles ::: {exception}")
         return {'response': 'Internal Error Server'}
-    

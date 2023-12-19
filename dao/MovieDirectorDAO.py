@@ -2,7 +2,7 @@ from dao.ModelDAO import ModelDAO
 from model.MovieDirectorM import MovieDirector
 
 
-class MovieDirectorDirectorDAO(ModelDAO):
+class MovieDirectorDAO(ModelDAO):
     def __init__(self):
         '''
         Initialise l'objet ActorDAO en établissant une connexion à la base de données.
@@ -17,7 +17,22 @@ class MovieDirectorDirectorDAO(ModelDAO):
         pass
 
     def findOne(self, pattern) -> MovieDirector:
-        pass
+        try:
+            query = 'SELECT * FROM movie_director WHERE %s = %s'
+            self.cur.execute(query, (pattern[0], pattern[1],))
+            res = self.cur.fetchone()
+            if res:
+                md = MovieDirector()
+                md.setMovieId(res[0])
+                md.setDirectorId(res[1])
+                return md
+            else:
+                return None
+        except Exception as exception:
+            print(f'''Error_MovieDirectorDAO.findOne ::: {exception}''')
+            return None
+        finally:
+            self.cur.close()
 
     def findAll(self) -> list[MovieDirector]:
         pass
