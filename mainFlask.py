@@ -11,12 +11,12 @@ app = Flask(__name__)
 # DIRECTOR
 
 
-@app.route(f'/api/amz/director/search_dir', methods=['GET'])
+@app.route(f'/api/amz/director/get_all_director', methods=['GET'])
 def _get_all_director():
     '''
         Get all information for director
     '''
-    directorc = DirectorC.Director.findDirector()
+    directorc = DirectorC.Director.get_all_director()
 
     list_director = []
 
@@ -205,12 +205,11 @@ def _get_all_infos_movie():
     '''
         Get all information for one movie from database
     '''
-    colonne_name = request.json.get('colonne_name')
-    id_value = request.json.get('id_value')
-    pattern = [colonne_name, id_value]
-    mdC = MovieDirectorC.MovieDirector.get_movie_director(pattern)
+
+    id_movie = request.json.get('id_movie')
+    mdC = MovieDirectorC.MovieDirector.get_movie_director(id_movie)
     if mdC == 'ERROR':
-        return {"response": "Errur lors de la récupération de données"}
+        return {"response": "Erreur lors de la récupération de données"}
     if mdC:
         id_movie_res = mdC.getMovieId()
         id_director_res = mdC.getDirectorId()
@@ -242,7 +241,7 @@ def _get_average_rank_year():
     if movieC == 'ERROR':
         return {"response": "Erreur lors du classement moyen."}
     if movieC:
-        return {"response": f"Le classement moyen pour l'annnée {year} est {movieC[0]}"}
+        return {"response": f"Le classement moyen pour l'annnée {year} est de {movieC[0]}"}
 
 
 # ADMIN

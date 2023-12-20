@@ -18,9 +18,11 @@ class MovieDirectorDAO(ModelDAO.ModelDAO):
 
     def findOne(self, pattern) -> MovieDirector:
         try:
-            query = f'SELECT * FROM movie_director WHERE {pattern[0]} = {pattern[1]}'
-            self.cur.execute(query)
+            query = f'SELECT * FROM movie_director WHERE id_movie = %s'
+            print(pattern)
+            self.cur.execute(query, (pattern,))
             res = self.cur.fetchone()
+            print(res)
             if res:
                 md = MovieDirector()
                 md.setMovieId(res[0])
