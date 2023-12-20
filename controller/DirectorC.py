@@ -39,12 +39,12 @@ class Director:
         return None
     
     @staticmethod
-    def insert_data():
+    def insert_data(objIns):
         try:
-            d = DirectorDAO().insertOne()
-            if d == None:
-                return 'ERROR'
-            return d
+            d = DirectorDAO().insertOne(objIns)
+            if d != 0:
+                return d
+            return 'ERROR'
         except Exception as exception:
             print(f'''Error_MovieC.insert_data ::: {exception}''')
         return None

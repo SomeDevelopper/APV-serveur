@@ -7,7 +7,7 @@ class DirectorGenreDAO(ModelDAO):
         '''
         Initialise l'objet ActorDAO en établissant une connexion à la base de données.
         '''
-        params = ModelDAO.modeleDAO.connect_objet
+        params = ModelDAO.connect_objet
         self.cur = params.cursor()
 
     def insertOne(self, objIns: DirectorGenre) -> int:

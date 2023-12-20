@@ -17,9 +17,9 @@ class MovieDirector:
         return None
     
     @staticmethod
-    def insert_data():
+    def insert_data(objIns):
         try:
-            md = MovieDirectorDAO().insertOne()
+            md = MovieDirectorDAO().insertOne(objIns)
             if md == None:
                 return 'ERROR'
             return md

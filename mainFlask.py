@@ -2,9 +2,9 @@ from flask import Flask, render_template, request
 import json
 import traceback
 from datetime import datetime
-from controller import DirectorC, ActorC, MovieC, SystadminC, MovieDirectorC
+from controller import DirectorC, ActorC, MovieC, SystadminC, MovieDirectorC, RoleC, DirectorGenreC, MovieGenreC
 
-from model import DirectorM, ActorM, MovieM
+from model import DirectorM, ActorM, MovieM, RoleM, MovieDirectorM, MovieGenreM, DirectorGenreM
 
 app = Flask(__name__)
 
@@ -216,7 +216,7 @@ def _get_all_infos_movie():
         mC = MovieC.Movie.searchMovie(id_movie_res)
         dC = DirectorC.Director.searchDirector(id_director_res)
         if (dC == 'ERROR') or (mC == 'ERROR'):
-            return {"response": "Errur lors de la récupération de données"}
+            return {"response": "Erreur lors de la récupération de données"}
         if mC and dC:
             res = {
                 "id_movie": mC.getMovieId(),
@@ -310,8 +310,43 @@ def _grand_role_user():
 def _insert_movie():
     try:
         req = request.json
-        print(req)
-        return {"response": True}
+        m = MovieM.Movie()
+        m.setMovieId(req.get('id_movie'))
+        m.setMovieName(req.get('name'))
+        m.setMovieYear(req.get('year_movie'))
+        m.setMovieRank(req.get('rank'))
+        a = ActorM.Actor()
+        a.setActorId(req.get('id_actor'))
+        a.setFirstname(req.get('firstname_a'))
+        a.setLastname(req.get('lastname_a'))
+        d = DirectorM.Director()
+        d.setid_director(req.get('id_director'))
+        d.setDirectorFirstname(req.get('firstname_d'))
+        d.setDirectorLastname(req.get('lastname_d'))
+        dg = DirectorGenreM.DirectorGenre()
+        dg.setDirectorId(req.get('id_director'))
+        dg.setGenre(req.get('genre'))
+        md = MovieDirectorM.MovieDirector()
+        md.setDirectorId(req.get('id_director'))
+        md.setMovieId(req.get('id_movie'))
+        mg = MovieGenreM.MovieGenre()
+        mg.setMovieId(req.get('id_movie'))
+        mg.setGenre(req.get('genre'))
+        r = RoleM.Role()
+        r.setMovieId(req.get('id_movie'))
+        r.setActorId(req.get('id_actor'))
+        r.setRole(req.get('role'))
+        mC = MovieC.Movie.insert_data(m)
+        aC = ActorC.Actor.insert_data(a)
+        dC = DirectorC.Director.insert_data(d)
+        dgC = DirectorGenreC.DirectorGenre.insert_data(dg)
+        mdC = MovieDirectorC.MovieDirector.insert_data(md)
+        mgC = MovieGenreC.MovieGenre.insert_data(mg)
+        rC = RoleC.Role.insert_data(r)
+        if (dC == 'ERROR') or (mC == 'ERROR') or (aC == 'ERROR') or (dgC == 'ERROR') or (mgC == 'ERROR') or (mdC == 'ERROR') or (rC  == 'ERROR'):
+            return {"response": "Erreur lors de la récupération de données"}
+        if mC and aC and dC and dgC and mdC and mgC and rC:
+            return {"response": "Informations ajoutées"}
     except Exception as exception:
         print(f"Erreur lors de l'insertion de données ::: {exception}")
         return {'response': 'Internal Error Server'}

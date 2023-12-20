@@ -3,9 +3,9 @@ from model import RoleM
 
 class Role:
     @staticmethod
-    def insert_data():
+    def insert_data(objIns):
         try:
-            r = RoleDAO().insertOne()
+            r = RoleDAO().insertOne(objIns)
             if r == None:
                 return 'ERROR'
             return r

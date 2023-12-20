@@ -7,7 +7,7 @@ class MovieGenreDAO(ModelDAO):
         '''
         Initialise l'objet ActorDAO en établissant une connexion à la base de données.
         '''
-        params = ModelDAO.modeleDAO.connect_objet
+        params = ModelDAO.connect_objet
         self.cur = params.cursor()
 
     def insertOne(self, objIns: MovieGenre) -> int:
@@ -100,10 +100,10 @@ class MovieGenreDAO(ModelDAO):
         finally:
             self.cur.close()
 
-    def findOneByOneWithLike(self, patternLike) -> list[MovieGenre]:
+    def findOneWithLike(self, patternLike) -> list[MovieGenre]:
         pass
 
-    def UpdateOne(self, cleAnc, objModif: MovieGenre) -> int:
+    def updateOne(self, cleAnc, objModif: MovieGenre) -> int:
         try:
             query = '''UPDATE moviegenre SET genre = %s, WHERE id_movie = %s;'''
             self.cur.execute(query, (objModif.getGenre(), cleAnc))

@@ -46,9 +46,9 @@ class Actor:
         return None
     
     @staticmethod
-    def insert_data():
+    def insert_data(objIns):
         try:
-            a = ActorDAO().insertOne()
+            a = ActorDAO().insertOne(objIns)
             if a == None:
                 return 'ERROR'
             return a

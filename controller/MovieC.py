@@ -48,9 +48,9 @@ class Movie:
         return None
     
     @staticmethod
-    def insert_data():
+    def insert_data(objIns):
         try:
-            m = MovieDAO().insertOne()
+            m = MovieDAO().insertOne(objIns)
             if m == None:
                 return 'ERROR'
             return m

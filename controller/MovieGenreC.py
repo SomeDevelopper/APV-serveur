@@ -3,9 +3,9 @@ from model import MovieGenreM
 
 class MovieGenre:
     @staticmethod
-    def insert_data():
+    def insert_data(objIns):
         try:
-            mg = MovieGenreDAO().insertOne()
+            mg = MovieGenreDAO().insertOne(objIns)
             if mg == None:
                 return 'ERROR'
             return mg

@@ -4,9 +4,9 @@ from model import DirectorGenreM
 class DirectorGenre:
 
     @staticmethod
-    def insert_data():
+    def insert_data(objIns):
         try:
-            dg = DirectorGenreDAO().insertOne()
+            dg = DirectorGenreDAO().insertOne(objIns)
             if dg == None:
                 return 'ERROR'
             return dg
