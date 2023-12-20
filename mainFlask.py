@@ -205,23 +205,32 @@ def _get_all_infos_movie():
     '''
         Get all information for one movie from database
     '''
-    id_movie = request.json.get('id_movie')
-    id_director = request.json.get('id_director')
-    pattern = []
-    pattern.append(id_movie, id_director)
-    mdC = MovieDirectorC.MovieDirector.get_movie_director()
+    colonne_name = request.json.get('colonne_name')
+    id_value = request.json.get('id_value')
+    pattern = [colonne_name, id_value]
+    mdC = MovieDirectorC.MovieDirector.get_movie_director(pattern)
     if mdC == 'ERROR':
         return {"response": "Errur lors de la récupération de données"}
     if mdC:
         id_movie_res = mdC.getMovieId()
         id_director_res = mdC.getDirectorId()
-        print(id_movie_res)
-        print(id_director_res)
-        return {'response': mdC}
+        mC = MovieC.Movie.searchMovie(id_movie_res)
+        dC = DirectorC.Director.searchDirector(id_director_res)
+        if (dC == 'ERROR') or (mC == 'ERROR'):
+            return {"response": "Errur lors de la récupération de données"}
+        if mC and dC:
+            res = {
+                "id_movie": mC.getMovieId(),
+                "title": mC.getMovieName(),
+                "year_movie": mC.getMovieYear(),
+                "rank": mC.getMovieRank(),
+                "id_director": dC.getIdDirector(),
+                "director": f'{dC.getDirectorFirstname()} {dC.getDirectorLastname()}'
+            }
+            return {'response': res}
 
 
 # Custom REQUEST FROM CLASS
-
 
 @app.route(f'/api/amz/request/get_rank_average_by_year', methods=['GET'])
 def _get_average_rank_year():

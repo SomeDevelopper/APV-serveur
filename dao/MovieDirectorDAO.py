@@ -1,13 +1,13 @@
-from dao.ModelDAO import ModelDAO
+from dao import ModelDAO
 from model.MovieDirectorM import MovieDirector
 
 
-class MovieDirectorDAO(ModelDAO):
+class MovieDirectorDAO(ModelDAO.ModelDAO):
     def __init__(self):
         '''
         Initialise l'objet ActorDAO en établissant une connexion à la base de données.
         '''
-        params = ModelDAO.modeleDAO.connect_objet
+        params = ModelDAO.ModelDAO.connect_objet
         self.cur = params.cursor()
 
     def insertOne(self, objIns: MovieDirector) -> int:
@@ -18,8 +18,8 @@ class MovieDirectorDAO(ModelDAO):
 
     def findOne(self, pattern) -> MovieDirector:
         try:
-            query = 'SELECT * FROM movie_director WHERE %s = %s'
-            self.cur.execute(query, (pattern[0], pattern[1],))
+            query = f'SELECT * FROM movie_director WHERE {pattern[0]} = {pattern[1]}'
+            self.cur.execute(query)
             res = self.cur.fetchone()
             if res:
                 md = MovieDirector()
