@@ -2,3 +2,4 @@ abcmeta
 psycopg2
 Flask
 PyYAML
+Flask_Cors

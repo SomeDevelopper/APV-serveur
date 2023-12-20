@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request
+from flask_cors import CORS
 import json
 import traceback
+from functools import wraps
 from datetime import datetime
 from controller import DirectorC, ActorC, MovieC, SystadminC, MovieDirectorC, RoleC, DirectorGenreC, MovieGenreC
 
@@ -8,10 +10,63 @@ from model import DirectorM, ActorM, MovieM, RoleM, MovieDirectorM, MovieGenreM,
 
 app = Flask(__name__)
 
+CORS(app, resources={fr"api/lvmh/sephora/postgresql/*": {"origins": "*"}})
+
+LOG_FILE_PATH = 'utils/logs.json'
+
+
+def log_request_info(route_function):
+    @wraps(route_function)
+    def wrapper(*args, **kwargs):
+        try:
+            start_time = datetime.now()
+
+            # Exécuter la fonction de route
+            response = route_function(*args, **kwargs)
+
+            end_time = datetime.now()
+            execution_time = (end_time - start_time).total_seconds()
+
+            # Récupérer les informations de la requête
+            request_info = {
+                'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                'route': request.path,
+                'method': request.method,
+                'ip_address': request.headers.get('X-Forwarded-For', request.remote_addr),
+                'execution_time': execution_time,
+                'response': response
+            }
+
+            # Charger les anciens logs
+            try:
+                with open(LOG_FILE_PATH, 'r') as log_file:
+                    logs = json.load(log_file)
+            except (FileNotFoundError, json.JSONDecodeError):
+                logs = []
+
+            # Ajouter les nouveaux logs
+            logs.append(request_info)
+
+            # Enregistrer les logs dans le fichier
+            with open(LOG_FILE_PATH, 'w') as log_file:
+                json.dump(logs, log_file, indent=2)
+
+            return response
+        except Exception as e:
+            error_message = f"Erreur lors de la journalisation de la requête : {e}"
+            print(error_message)
+
+            # Inclure les informations d'erreur dans la réponse JSON
+            return {'error': 'Erreur interne du serveur', 'details': str(e), 'traceback': traceback.format_exc()}
+
+    return wrapper
+
+
 # DIRECTOR
 
 
 @app.route(f'/api/amz/director/get_all_director', methods=['GET'])
+@log_request_info
 def _get_all_director():
     '''
         Get all information for director
@@ -34,6 +89,7 @@ def _get_all_director():
 
 
 @app.route('/api/amz/director/search_director', methods=['GET'])
+@log_request_info
 def _search_director():
     '''
         Search director by id in database
@@ -52,6 +108,7 @@ def _search_director():
 
 
 @app.route(f'/api/amz/director/search_with_name', methods=['GET'])
+@log_request_info
 def _search_director_name():
     '''
         Search director by name in database
@@ -75,6 +132,7 @@ def _search_director_name():
 
 
 @app.route(f'/api/amz/actor/get_all_actor', methods=['GET'])
+@log_request_info
 def _get_all_actor():
     '''
         Get all actor from database
@@ -95,6 +153,7 @@ def _get_all_actor():
 
 
 @app.route(f'/api/amz/actor/search_actor', methods=['GET'])
+@log_request_info
 def _search_actor():
     '''
         Search one specific actor from database
@@ -113,6 +172,7 @@ def _search_actor():
 
 
 @app.route(f'/api/amz/actor/search_with_name', methods=['GET'])
+@log_request_info
 def _search_actor_with_name():
     '''
         Get all movie with filter title from database
@@ -137,6 +197,7 @@ def _search_actor_with_name():
 
 
 @app.route(f'/api/amz/movie/search_movie', methods=['GET'])
+@log_request_info
 def _search_movie():
     '''
         Search one specific movie from database
@@ -156,6 +217,7 @@ def _search_movie():
 
 
 @app.route(f'/api/amz/movie/get_all_movie', methods=['GET'])
+@log_request_info
 def _get_all_movie():
     '''
         Get all movie from database
@@ -178,6 +240,7 @@ def _get_all_movie():
 
 
 @app.route(f'/api/amz/movie/search_with_title', methods=['GET'])
+@log_request_info
 def _search_movie_with_title():
     '''
         Get all movie with filter title from database
@@ -201,6 +264,7 @@ def _search_movie_with_title():
 
 
 @app.route(f'/api/amz/movie/get_infos_movie', methods=['GET'])
+@log_request_info
 def _get_all_infos_movie():
     '''
         Get all information for one movie from database
@@ -231,6 +295,7 @@ def _get_all_infos_movie():
 # Custom REQUEST FROM CLASS
 
 @app.route(f'/api/amz/request/get_rank_average_by_year', methods=['GET'])
+@log_request_info
 def _get_average_rank_year():
     '''
         Get average movie's rank for specific year from database
@@ -243,6 +308,7 @@ def _get_average_rank_year():
         return {"response": f"Le classement moyen pour l'annnée {year} est de {movieC[0]}"}
 
 @app.route(f'/api/amz/actor/get_ntile', methods=['GET'])
+@log_request_info
 def _get_ntile_actor():
     aC = ActorC.Actor.get_ntile_actor()
     if type(aC) == list:
@@ -260,6 +326,7 @@ def _get_ntile_actor():
         return {'response': 'Erreur lors du groupage des acteurs'}
 
 @app.route(f'/api/amz/movie/get_case_movie', methods=['GET'])
+@log_request_info
 def _get_case_movie():
     mC = MovieC.Movie.get_case_movie()
     if mC == 'ERROR':
@@ -278,6 +345,7 @@ def _get_case_movie():
         return {'response': list_res_case}
 
 @app.route(f'/api/amz/request/get_initiale', methods=['GET'])
+@log_request_info
 def _get_initiale():
     start = request.json.get('start')
     nb_letter = request.json.get('nb_letter')
@@ -299,6 +367,7 @@ def _get_initiale():
 # ADMIN
 
 @app.route(f'/api/amz/admin/create_user', methods=['POST'])
+@log_request_info
 def _create_user():
     try:
         password = request.json.get('password')
@@ -313,6 +382,7 @@ def _create_user():
         return {'response': "Internal Error Server"}
 
 @app.route(f'/api/amz/admin/create_role', methods=['POST'])
+@log_request_info
 def _create_role():
     try:
         role = request.json.get('role')
@@ -326,6 +396,7 @@ def _create_role():
         return {'response': 'Internal Error Server'}
 
 @app.route(f'/api/amz/admin/grant_privilege', methods=['POST'])
+@log_request_info
 def _attribute_privilege():
     try:
         privileges = request.json.get('privileges')
@@ -343,6 +414,7 @@ def _attribute_privilege():
         return {'response': "Internal Error Server"}
 
 @app.route(f'/api/amz/admin/grant_role_user', methods=['POST'])
+@log_request_info
 def _grand_role_user():
     try:
         user = request.json.get('user')
@@ -357,6 +429,7 @@ def _grand_role_user():
         return {'response': 'Internal Error Server'}
 
 @app.route(f'/api/amz/admin/insert_movie', methods=['POST'])
+@log_request_info
 def _insert_movie():
     try:
         req = request.json
