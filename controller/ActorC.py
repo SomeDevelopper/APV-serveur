@@ -55,3 +55,14 @@ class Actor:
         except Exception as exception:
             print(f'''Error_MovieC.insert_data ::: {exception}''')
         return None
+    
+    @staticmethod
+    def get_ntile_actor():
+        try:
+            a = ActorDAO().getNtileData()
+            if a != 0:
+                return a
+            return 'ERROR'
+        except Exception as exception:
+            print(f"Error_ActorC.get_ntile_actor ::: {exception}")
+        return None

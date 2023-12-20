@@ -6,9 +6,9 @@ class MovieGenre:
     def insert_data(objIns):
         try:
             mg = MovieGenreDAO().insertOne(objIns)
-            if mg == None:
-                return 'ERROR'
-            return mg
+            if mg != 0:
+                return mg
+            return 'ERROR'
         except Exception as exception:
             print(f'''Error_MovieC.insert_data ::: {exception}''')
         return None

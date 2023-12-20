@@ -51,9 +51,20 @@ class Movie:
     def insert_data(objIns):
         try:
             m = MovieDAO().insertOne(objIns)
+            if m != 0:
+                return m
+            return 'ERROR'
+        except Exception as exception:
+            print(f'''Error_MovieC.insert_data ::: {exception}''')
+        return None
+    
+    @staticmethod
+    def get_case_movie():
+        try:
+            m = MovieDAO().getCaseRank()
             if m == None:
                 return 'ERROR'
             return m
         except Exception as exception:
-            print(f'''Error_MovieC.insert_data ::: {exception}''')
+            print(f'Error_MovieC.get_ntile_movie ::: {exception}')
         return None

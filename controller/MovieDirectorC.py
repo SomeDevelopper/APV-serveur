@@ -20,9 +20,9 @@ class MovieDirector:
     def insert_data(objIns):
         try:
             md = MovieDirectorDAO().insertOne(objIns)
-            if md == None:
-                return 'ERROR'
-            return md
+            if md != 0:
+                return md
+            return 'ERROR'
         except Exception as exception:
             print(f'''Error_MovieC.insert_data ::: {exception}''')
         return None

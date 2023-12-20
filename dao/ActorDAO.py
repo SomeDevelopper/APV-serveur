@@ -25,7 +25,17 @@ class ActorDAO(ModelDAO):
             self.cur.close()
 
     def insertAll(self, objInsList: list[Actor] = []) -> int:
-        pass
+        try:
+            query = '''INSERT INTO actor (id_actor, firstname, lastname) 
+                           VALUES (%s, %s, %s);'''
+            self.cur.executemany(query, [(obj.getActorId(), obj.getFirstname(), obj.getLastname()) for obj in objInsList])
+            self.cur.connection.commit()
+            return self.cur.rowcount if self.cur.rowcount != 0 else 0
+        except Exception as e:
+            print(f"Erreur_ActorDAO.insertAll ::: {e}")
+            self.cur.connection.rollback()
+        finally:
+            self.cur.close()
 
     def findOne(self, id_actor) -> Actor:
         '''
@@ -76,7 +86,28 @@ class ActorDAO(ModelDAO):
 
 
     def findOneByOne(self, pattern) -> list[Actor]:
-        pass
+        try:
+            query = '''SELECT * FROM actor WHERE firstname = %s;'''
+            self.cur.execute(query, (pattern,))
+            res = self.cur.fetchall()
+
+            list_actor = []
+
+            if len(res) > 0:
+                for r in res:
+                    a = Actor()
+                    a.setActorId(r[0])
+                    a.setFirstname(r[1])
+                    a.setLastname(r[2])
+                    list_actor.append(a)
+
+                return list_actor
+            else:
+                return None
+        except Exception as e:
+            print(f"Erreur_ActorDAO.findOneByOne ::: {e}")
+        finally:
+            self.cur.close()
 
     def findOneWithLike(self, patternLike) -> list[Actor]:
         try:
@@ -101,13 +132,57 @@ class ActorDAO(ModelDAO):
             self.cur.close()
 
     def updateOne(self, cleAnc, objModif: Actor) -> int:
-        pass
+        try:
+            query = '''UPDATE actor SET firstname = %s, lastname = %s
+                           WHERE id_actor = %s;'''
+            self.cur.execute(query, (objModif.getFirstname(), objModif.getLastname(), cleAnc))
+            self.cur.connection.commit()
+            return self.cur.rowcount if self.cur.rowcount != 0 else 0
+        except Exception as e:
+            print(f"Erreur_ActorDAO.updateOne() ::: {e}")
+            self.cur.connection.rollback()
+        finally:
+            self.cur.close()
 
     def deleteOne(self, cleSup) -> int:
-        pass
+        try:
+            query = '''DELETE FROM actor WHERE id_actor = %s;'''
+            self.cur.execute(query, (cleSup,))
+            self.cur.connection.commit()
+            return self.cur.rowcount if self.cur.rowcount != 0 else 0
+        except Exception as e:
+            print(f"Erreur_ActorDAO.deleteOne() ::: {e}")
+            self.cur.connection.rollback()
+        finally:
+            self.cur.close()
 
     def getAverageRankForYear(self, year) -> list:
         pass
+
+    def getNtileData(self) -> list:
+        '''
+            Get actors divided into 4 equal groups based on their last name using NTILE from database
+        '''
+        try:
+            query = '''SELECT id_actor, firstname, lastname, NTILE(4) OVER (ORDER BY firstname) FROM actor'''
+            self.cur.execute(query)
+            res = self.cur.fetchall()
+            if res:
+                return res
+            else:
+                return None
+        except Exception as e:
+            print(f"Error_ActorDAO.getNtileData ::: {e}")
+            return None
+        finally:
+            self.cur.close()
+
+    def getCaseRank(self) -> list:
+        pass
+
+    def getSubStr(self, start, nb_letter) -> list:
+        pass
+
 
     def createUser(self, pwd, user) -> int:
         pass

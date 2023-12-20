@@ -5,7 +5,7 @@ from model.DirectorM import Director
 class DirectorDAO(ModelDAO.ModelDAO):
     def __init__(self):
         '''
-        Initialise l'objet ActorDAO en établissant une connexion à la base de données.
+        Initialise l'objet DirectorDAO en établissant une connexion à la base de données.
         '''
         params = ModelDAO.ModelDAO.connect_objet
         self.cur = params.cursor()
@@ -25,7 +25,17 @@ class DirectorDAO(ModelDAO.ModelDAO):
             self.cur.close()
 
     def insertAll(self, objInsList: list[Director] = []) -> int:
-        pass
+        try:
+            query = '''INSERT INTO director (id_director, firstname, lastname) 
+                           VALUES (%s, %s, %s);'''
+            self.cur.executemany(query, [(obj.getid_director(), obj.getDirectorFirstname(), obj.getDirectorLastname()) for obj in objInsList])
+            self.cur.connection.commit()
+            return self.cur.rowcount if self.cur.rowcount != 0 else 0
+        except Exception as e:
+            print(f"Erreur_DirectorDAO.insertAll ::: {e}")
+            self.cur.connection.rollback()
+        finally:
+            self.cur.close()
 
     def findOne(self, id_director) -> Director:
         '''
@@ -75,7 +85,29 @@ class DirectorDAO(ModelDAO.ModelDAO):
             self.cur.close()
 
     def findOneByOne(self, pattern) -> list[Director]:
-        pass
+        try:
+            query = '''SELECT * FROM director WHERE firstname = %s;'''
+            self.cur.execute(query, (pattern,))
+            res = self.cur.fetchall()
+
+            list_director = []
+
+            if len(res) > 0:
+                for r in res:
+                    d = Director()
+                    d.setid_director(r[0])
+                    d.setDirectorFirstname(r[1])
+                    d.setDirectorLastname(r[2])
+                    list_director.append(d)
+
+                return list_director
+            else:
+                return None
+        except Exception as e:
+            print(f"Erreur_DirectorDAO.findOneByOne ::: {e}")
+        finally:
+            self.cur.close()
+
 
     def findOneWithLike(self, patternLike) -> list[Director]:
         '''
@@ -103,13 +135,55 @@ class DirectorDAO(ModelDAO.ModelDAO):
             self.cur.close()
 
     def updateOne(self, cleAnc, objModif: Director) -> int:
-        pass
+        try:
+            query = '''UPDATE director SET firstname = %s, lastname = %s
+                           WHERE id_director = %s;'''
+            self.cur.execute(query, (objModif.getDirectorFirstname(), objModif.getDirectorLastname(), cleAnc))
+            self.cur.connection.commit()
+            return self.cur.rowcount if self.cur.rowcount != 0 else 0
+        except Exception as e:
+            print(f"Erreur_DirectorDAO.updateOne() ::: {e}")
+            self.cur.connection.rollback()
+        finally:
+            self.cur.close()
 
     def deleteOne(self, cleSup) -> int:
-        pass
+        try:
+            query = '''DELETE FROM director WHERE id_director = %s;'''
+            self.cur.execute(query, (cleSup,))
+            self.cur.connection.commit()
+            return self.cur.rowcount if self.cur.rowcount != 0 else 0
+        except Exception as e:
+            print(f"Erreur_DirectorDAO.deleteOne() ::: {e}")
+            self.cur.connection.rollback()
+        finally:
+            self.cur.close()
 
     def getAverageRankForYear(self, year) -> list:
         pass
+
+    def getCaseRank(self) -> list:
+        pass
+    
+    def getNtileData(self) -> list:
+        pass
+
+    def getSubStr(self, start, nb_letter) -> list:
+        try:
+            query = '''select id_actor, firstname, lastname, substr(firstname, %s, %s) as initiale from actor a'''
+            self.cur.execute(query, (start, nb_letter,))
+            res = self.cur.fetchall()
+            if len(res) > 0:
+                return res
+            else:
+                return None
+
+        except Exception as exception:
+            print(f'''Error_DirectorDAO.getSubStr ::: {exception}''')
+            return None
+        finally:
+            self.cur.close()
+
 
     def createUser(self, pwd, user) -> int:
         pass

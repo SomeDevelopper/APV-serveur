@@ -36,6 +36,15 @@ class Systadmin(ModelDAO):
 
     def getAverageRankForYear(self, year) -> list:
         pass
+
+    def getCaseRank(self) -> list:
+        pass
+    
+    def getNtileData(self) -> list:
+        pass
+
+    def getSubStr(self) -> list:
+        pass
     
     def createUser(self, pwd: str, user: str) -> int:
         print('DAO', self)

@@ -228,7 +228,6 @@ def _get_all_infos_movie():
             }
             return {'response': res}
 
-
 # Custom REQUEST FROM CLASS
 
 @app.route(f'/api/amz/request/get_rank_average_by_year', methods=['GET'])
@@ -243,8 +242,62 @@ def _get_average_rank_year():
     if movieC:
         return {"response": f"Le classement moyen pour l'annnée {year} est de {movieC[0]}"}
 
+@app.route(f'/api/amz/actor/get_ntile', methods=['GET'])
+def _get_ntile_actor():
+    aC = ActorC.Actor.get_ntile_actor()
+    if type(aC) == list:
+        list_actor_group = []
+        for a in aC:
+            res = {
+                'id_actor': a[0],
+                'firstname': a[1],
+                'lastname': a[2],
+                'groupe': a[3]
+            }
+            list_actor_group.append(res)
+        return {"response": list_actor_group}
+    if aC == 'ERROR':
+        return {'response': 'Erreur lors du groupage des acteurs'}
+
+@app.route(f'/api/amz/movie/get_case_movie', methods=['GET'])
+def _get_case_movie():
+    mC = MovieC.Movie.get_case_movie()
+    if mC == 'ERROR':
+        return {'reponse': 'Erreur lors de la récupération de données'}
+    else:
+        list_res_case = []
+        for r in mC:
+            res = {
+                'id_movie': r[0],
+                'title': r[1],
+                'year_movie': r[2],
+                'rank': r[3],
+                'Evaluation': r[4]
+            }
+            list_res_case.append(res)
+        return {'response': list_res_case}
+
+@app.route(f'/api/amz/request/get_initiale', methods=['GET'])
+def _get_initiale():
+    start = request.json.get('start')
+    nb_letter = request.json.get('nb_letter')
+    r = DirectorC.Director.get_initiale(start, nb_letter)
+    if r == 'ERROR':
+        return {'response': "Une erreur s'est produite"}
+    else:
+        list_d_init = []
+        for d in r:
+            res = {
+                'id_actor': d[0],
+                'firstname': d[1],
+                'lastname': d[2],
+                'initiale': d[3]
+            }
+            list_d_init.append(res)
+        return {'response': list_d_init}
 
 # ADMIN
+
 @app.route(f'/api/amz/admin/create_user', methods=['POST'])
 def _create_user():
     try:
@@ -259,7 +312,6 @@ def _create_user():
         print(f"Erreur lors de la creation d'utilisateur ::: {exception}")
         return {'response': "Internal Error Server"}
 
-
 @app.route(f'/api/amz/admin/create_role', methods=['POST'])
 def _create_role():
     try:
@@ -272,7 +324,6 @@ def _create_role():
     except Exception as exception:
         print(f"Error lors de la creation de role ::: {exception}")
         return {'response': 'Internal Error Server'}
-
 
 @app.route(f'/api/amz/admin/grant_privilege', methods=['POST'])
 def _attribute_privilege():
@@ -290,7 +341,6 @@ def _attribute_privilege():
     except Exception as exception:
         print(f"Error lors de l'attribution des privilèges ::: {exception}")
         return {'response': "Internal Error Server"}
-
 
 @app.route(f'/api/amz/admin/grant_role_user', methods=['POST'])
 def _grand_role_user():

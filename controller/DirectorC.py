@@ -48,4 +48,15 @@ class Director:
         except Exception as exception:
             print(f'''Error_MovieC.insert_data ::: {exception}''')
         return None
+    
+    @staticmethod
+    def get_initiale(start, nb_letter):
+        try:
+            d = DirectorDAO().getSubStr(start, nb_letter)
+            if d == None:
+                return 'ERROR'
+            return d
+        except Exception as exception:
+            print(f'''Error_DirecorC.get_initiale ::: {exception}''')
+        return None
 
