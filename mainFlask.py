@@ -10,7 +10,7 @@ from model import DirectorM, ActorM, MovieM, RoleM, MovieDirectorM, MovieGenreM,
 
 app = Flask(__name__)
 
-CORS(app, resources={fr"api/lvmh/sephora/postgresql/*": {"origins": "*"}})
+CORS(app, resources={fr"api/amz/*": {"origins": "*"}})
 
 LOG_FILE_PATH = 'utils/logs.json'
 
