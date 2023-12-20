@@ -11,7 +11,18 @@ class MovieDirectorDAO(ModelDAO.ModelDAO):
         self.cur = params.cursor()
 
     def insertOne(self, objIns: MovieDirector) -> int:
-        pass
+        try:
+            query = '''INSERT INTO movie_director (id_movie, id_director)
+                        VALUES (%s, %s)'''
+            self.cur.execute(
+                query, (objIns.getMovieId(), objIns.getDirectorId(),))
+            self.cur.connection.commit()
+            return self.cur.rowcount if self.cur.rowcount > 0 else 0
+        except Exception as exception:
+            print(f'''Error_MovieDirectorDAO.insertOne ::: {exception}''')
+            return 0
+        finally:
+            self.cur.close()
 
     def insertAll(self, objInsList: list[MovieDirector] = []) -> int:
         pass
@@ -19,10 +30,8 @@ class MovieDirectorDAO(ModelDAO.ModelDAO):
     def findOne(self, pattern) -> MovieDirector:
         try:
             query = f'SELECT * FROM movie_director WHERE id_movie = %s'
-            print(pattern)
             self.cur.execute(query, (pattern,))
             res = self.cur.fetchone()
-            print(res)
             if res:
                 md = MovieDirector()
                 md.setMovieId(res[0])

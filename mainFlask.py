@@ -23,7 +23,7 @@ def _get_all_director():
     if type(directorc) == list:
         for dc in directorc:
             director = {
-                "id_director": dc.getIdDirector(),
+                "id_director": dc.getid_director(),
                 "firstname": dc.getDirectorFirstname(),
                 "lastname": dc.getDirectorLastname()
             }
@@ -42,7 +42,7 @@ def _search_director():
     directC = DirectorC.Director.searchDirector(id_director)
     if type(directC) == DirectorM.Director:
         res = {
-            "id_director": directC.getIdDirector(),
+            "id_director": directC.getid_director(),
             "firstname": directC.getDirectorFirstname(),
             "lastname": directC.getDirectorLastname()
         }
@@ -62,7 +62,7 @@ def _search_director_name():
     if type(directC) == list:
         for dc in directC:
             director = {
-                "id_director": dc.getIdDirector(),
+                "id_director": dc.getid_director(),
                 "firstname": dc.getDirectorFirstname(),
                 "lastname": dc.getDirectorLastname()
             }
@@ -223,7 +223,7 @@ def _get_all_infos_movie():
                 "title": mC.getMovieName(),
                 "year_movie": mC.getMovieYear(),
                 "rank": mC.getMovieRank(),
-                "id_director": dC.getIdDirector(),
+                "id_director": dC.getid_director(),
                 "director": f'{dC.getDirectorFirstname()} {dC.getDirectorLastname()}'
             }
             return {'response': res}
@@ -304,4 +304,14 @@ def _grand_role_user():
             return {'response': res}
     except Exception as exception:
         print(f"Erreur lors de l'attribution des roles ::: {exception}")
+        return {'response': 'Internal Error Server'}
+
+@app.route(f'/api/amz/admin/insert_movie', methods=['POST'])
+def _insert_movie():
+    try:
+        req = request.json
+        print(req)
+        return {"response": True}
+    except Exception as exception:
+        print(f"Erreur lors de l'insertion de données ::: {exception}")
         return {'response': 'Internal Error Server'}

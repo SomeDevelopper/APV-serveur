@@ -11,22 +11,33 @@ class DirectorDAO(ModelDAO.ModelDAO):
         self.cur = params.cursor()
 
     def insertOne(self, objIns: Director) -> int:
-        pass
+        try:
+            query = '''INSERT INTO director (id_director, firstname, lastname)
+                        VALUES (%s, %s, %s)'''
+            self.cur.execute(
+                query, (objIns.getid_director(), objIns.getDirectorFirstname(), objIns.getDirectorLastname(),))
+            self.cur.connection.commit()
+            return self.cur.rowcount if self.cur.rowcount > 0 else 0
+        except Exception as exception:
+            print(f'''Error_DirectorDAO.insertOne ::: {exception}''')
+            return 0
+        finally:
+            self.cur.close()
 
     def insertAll(self, objInsList: list[Director] = []) -> int:
         pass
 
-    def findOne(self, idDirector) -> Director:
+    def findOne(self, id_director) -> Director:
         '''
             Find Director by id in database
         '''
         try:
             query = '''SELECT * from director WHERE id_director = %s'''
-            self.cur.execute(query, (idDirector,))
+            self.cur.execute(query, (id_director,))
             res = self.cur.fetchone()
             if res:
                 director = Director()
-                director.setIdDirector(res[0])
+                director.setid_director(res[0])
                 director.setDirectorFirstname(res[1])
                 director.setDirectorLastname(res[2])
                 return director
@@ -50,7 +61,7 @@ class DirectorDAO(ModelDAO.ModelDAO):
             if len(res) > 0:
                 for row in res:
                     director = Director()
-                    director.setIdDirector(row[0])
+                    director.setid_director(row[0])
                     director.setDirectorFirstname(row[1])
                     director.setDirectorLastname(row[2])
 
@@ -79,7 +90,7 @@ class DirectorDAO(ModelDAO.ModelDAO):
             if len(res) > 0:
                 for direc in res:
                     director = Director()
-                    director.setIdDirector(direc[0])
+                    director.setid_director(direc[0])
                     director.setDirectorFirstname(direc[1])
                     director.setDirectorLastname(direc[2])
                     list_director.append(director)

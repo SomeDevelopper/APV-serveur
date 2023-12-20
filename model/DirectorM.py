@@ -5,10 +5,10 @@ class Director:
         self.__firstname: str = None
         self.__lastname: str = None
 
-    def setIdDirector(self, directorId) -> None:
+    def setid_director(self, directorId) -> None:
         self.__id_director = directorId
 
-    def getIdDirector(self) -> int:
+    def getid_director(self) -> int:
         return self.__id_director
 
     def setDirectorFirstname(self, firstname) -> None:

@@ -11,18 +11,29 @@ class ActorDAO(ModelDAO):
         self.cur = params.cursor()
 
     def insertOne(self, objIns: Actor) -> int:
-        pass
+        try:
+            query = '''INSERT INTO actor (id_actor, firstname, lastname)
+                        VALUES (%s, %s, %s)'''
+            self.cur.execute(
+                query, (objIns.getActorId(), objIns.getFirstname(), objIns.getLastname(),))
+            self.cur.connection.commit()
+            return self.cur.rowcount if self.cur.rowcount > 0 else 0
+        except Exception as exception:
+            print(f'''Error_ActorDAO.insertOne ::: {exception}''')
+            return 0
+        finally:
+            self.cur.close()
 
     def insertAll(self, objInsList: list[Actor] = []) -> int:
         pass
 
-    def findOne(self, idActor) -> Actor:
+    def findOne(self, id_actor) -> Actor:
         '''
             find one actor by id in database
         '''
         try:
             query = '''SELECT * FROM actor WHERE id_actor = %s;'''
-            self.cur.execute(query, (idActor,))
+            self.cur.execute(query, (id_actor,))
             res = self.cur.fetchone()
             if res:
                 actor = Actor()
@@ -80,7 +91,6 @@ class ActorDAO(ModelDAO):
                     actor.setFirstname(a[1])
                     actor.setLastname(a[2])
                     list_actor.append(actor)
-                print('DAO', list_actor)
                 return list_actor
             else:
                 return None

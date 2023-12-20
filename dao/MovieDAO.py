@@ -11,18 +11,29 @@ class MovieDAO(ModelDAO):
         self.cur = params.cursor()
 
     def insertOne(self, objIns: Movie) -> int:
-        pass
+        try:
+            query = '''INSERT INTO movie (id_movie, name, year_movie, rank)
+                        VALUES (%s, %s, %s, %s)'''
+            self.cur.execute(
+                query, (objIns.getMovieId(), objIns.getMovieName(), objIns.getMovieYear(), objIns.getMovieRank()))
+            self.cur.connection.commit()
+            return self.cur.rowcount if self.cur.rowcount > 0 else 0
+        except Exception as exception:
+            print(f'''Error_MovieDAO.insertOne ::: {exception}''')
+            return 0
+        finally:
+            self.cur.close()
 
     def insertAll(self, objInsList: list[Movie] = []) -> int:
         pass
 
-    def findOne(self, idMovie) -> Movie:
+    def findOne(self, id_movie) -> Movie:
         '''
             Find one movie by id in database
         '''
         try:
             query = '''SELECT * FROM movie WHERE id_movie = %s;'''
-            self.cur.execute(query, (idMovie,))
+            self.cur.execute(query, (id_movie,))
             res = self.cur.fetchone()
             if res:
                 movie = Movie()
@@ -95,7 +106,16 @@ class MovieDAO(ModelDAO):
         finally:
             self.cur.close()
     def updateOne(self, cleAnc, objModif: Movie) -> int:
-        pass
+        try:
+            query = '''UPDATE movie SET id_movie = %s, WHERE id_movie = %s;'''
+            self.cur.execute(query, (objModif.getGenre(), cleAnc))
+            self.cur.connection.commit()
+            return self.cur.rowcount if self.cur.rowcount!=0 else 0
+        except Exception as e:
+            print(f"Error_MovieGenreDAO.updateOne() ::: {e}")
+            self.cur.connection.rollback()
+        finally:
+            self.cur.close()
 
     def deleteOne(self, cleSup) -> int:
         pass

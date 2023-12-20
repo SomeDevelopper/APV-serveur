@@ -18,9 +18,9 @@ class Director:
             print(f'''Error_DirectorC.get_all_movie ::: {exception}''')
         return None
     
-    def searchDirector(idDirector):
+    def searchDirector(id_director):
         try:
-            d: DirectorM.Director = DirectorDAO().findOne(idDirector)
+            d: DirectorM.Director = DirectorDAO().findOne(id_director)
             if d == None:
                 return 'ERROR'
             return d
@@ -36,5 +36,16 @@ class Director:
             return d
         except Exception as exception:
             print(f'''Error_DirectorC.search_director_by_name ::: {exception}''')
+        return None
+    
+    @staticmethod
+    def insert_data():
+        try:
+            d = DirectorDAO().insertOne()
+            if d == None:
+                return 'ERROR'
+            return d
+        except Exception as exception:
+            print(f'''Error_MovieC.insert_data ::: {exception}''')
         return None
 

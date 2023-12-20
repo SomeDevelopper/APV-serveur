@@ -15,3 +15,14 @@ class MovieDirector:
             print(
                 f'''Error_MovieDirectorC.get_movie_director ::: {exception}''')
         return None
+    
+    @staticmethod
+    def insert_data():
+        try:
+            md = MovieDirectorDAO().insertOne()
+            if md == None:
+                return 'ERROR'
+            return md
+        except Exception as exception:
+            print(f'''Error_MovieC.insert_data ::: {exception}''')
+        return None

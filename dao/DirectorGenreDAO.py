@@ -11,7 +11,18 @@ class DirectorGenreDAO(ModelDAO):
         self.cur = params.cursor()
 
     def insertOne(self, objIns: DirectorGenre) -> int:
-        pass
+        try:
+            query = '''INSERT INTO director_genre (id_director, genre)
+                        VALUES (%s, %s)'''
+            self.cur.execute(
+                query, (objIns.getDirectorId(), objIns.getGenre(),))
+            self.cur.connection.commit()
+            return self.cur.rowcount if self.cur.rowcount > 0 else 0
+        except Exception as exception:
+            print(f'''Error_DirectorGenreDAO.insertOne ::: {exception}''')
+            return 0
+        finally:
+            self.cur.close()
 
     def insertAll(self, objInsList: list[DirectorGenre] = []) -> int:
         pass

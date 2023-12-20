@@ -4,9 +4,9 @@ from model import MovieM
 class Movie:
 
     @staticmethod
-    def searchMovie(idMovie):
+    def searchMovie(id_movie):
         try:
-            m: MovieM.Movie = MovieDAO().findOne(idMovie)
+            m: MovieM.Movie = MovieDAO().findOne(id_movie)
             if m == None:
                 return 'ERROR'
             return m
@@ -45,4 +45,15 @@ class Movie:
             return m
         except Exception as exception:
             print(f'''Error_MovieC.get_average_movie_rank_with_year ::: {exception}''')
+        return None
+    
+    @staticmethod
+    def insert_data():
+        try:
+            m = MovieDAO().insertOne()
+            if m == None:
+                return 'ERROR'
+            return m
+        except Exception as exception:
+            print(f'''Error_MovieC.insert_data ::: {exception}''')
         return None
