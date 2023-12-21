@@ -2,9 +2,9 @@
 
 # -- Project information
 
-project = 'LVMH-sephora'
-copyright = '2023, MULAPI'
-author = 'Ketsia MULAPI TITA'
+project = 'AMZ'
+copyright = '2023, SomeDevelopper'
+author = 'SomeDevelopper'
 
 release = '0.1'
 version = '0.1.0'
